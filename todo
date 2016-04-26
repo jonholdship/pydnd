@@ -1,0 +1,8 @@
+for party window, make it so the party name entry is a combo box that you can type in.
+have all previously saved parties in that box so it can be selected and therefore "loaded"
+and can write in new name to save a new party.
+
+Consider stealing all the code from old python one to make a monster class and a dictionary of monsters.
+
+
+Make filter and select lists scrollable. Can put a scroll window in glade file where they are and add them to the scroll windows rather than the grid.
