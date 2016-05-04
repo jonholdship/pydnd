@@ -3,6 +3,7 @@ import lists
 import os
 import csv
 gi.require_version('Gtk', '3.0')
+
 from gi.repository import Gtk
 from globals import Monster
 
@@ -21,7 +22,8 @@ class encounter:
         encloadbutton.connect("clicked",self.load_encounter)
         #deal with filtering boxes
         self.environbox=builder.get_object("environbox")
-        self.crbox=builder.get_object("crbox")
+        self.maxcrbox=builder.get_object("maxcrbox")
+        self.mincrbox=builder.get_object("mincrbox")
         self.typebox=builder.get_object("typebox")
         self.sizebox=builder.get_object("sizebox")
         self.searchbar=builder.get_object("monstersearch")
@@ -46,9 +48,10 @@ class encounter:
         self.environbox.set_active(0)
 
         for cr in lists.crs:
-            self.crbox.append_text(cr)
-        self.crbox.set_active(5)
-
+            self.maxcrbox.append_text(cr)
+            self.mincrbox.append_text(cr)
+        self.mincrbox.set_active(0)
+        self.maxcrbox.set_active(20)
         for type in lists.types:
             self.typebox.append_text(type)
         self.typebox.set_active(0)
@@ -57,7 +60,8 @@ class encounter:
             self.sizebox.append_text(size)
         self.sizebox.set_active(0)
 
-        self.crbox.connect("changed",self.filterbox_changed_cb)
+        self.maxcrbox.connect("changed",self.filterbox_changed_cb)
+        self.mincrbox.connect("changed",self.filterbox_changed_cb)
         self.typebox.connect("changed",self.filterbox_changed_cb)
         self.environbox.connect("changed",self.filterbox_changed_cb)
         self.sizebox.connect("changed",self.filterbox_changed_cb)
@@ -73,11 +77,12 @@ class encounter:
 # Buttons and Inputs                                   #
 ########################################################
     def filterbox_changed_cb(self,crbox):
-        chosencr=self.crbox.get_active_text()
-        if chosencr ==None:
-            chosencr='2'
+        chosencr=self.maxcrbox.get_active_text()
         maxcrindex=lists.crs.index(chosencr)
-        self.filterlist.cr_filter(maxcrindex,lists.crs,self.globaldata)
+        chosencr=self.mincrbox.get_active_text()
+        mincrindex=lists.crs.index(chosencr)
+
+        self.filterlist.cr_filter(mincrindex,maxcrindex,lists.crs,self.globaldata)
 
         #filter by type
         chosentype=self.typebox.get_active_text()
@@ -314,13 +319,13 @@ class monstlist:
 
         self.redraw_list()
 
-    def cr_filter(self, index,crlist,globaldata):
+    def cr_filter(self, minindex,maxindex,crlist,globaldata):
         self.monsters=[]
         for key in globaldata.monsters_dict:
             #append monsters to list
             monster=globaldata.monsters_dict[key]
             currentindex=crlist.index(monster.challenge_rating)
-            if currentindex <= index:
+            if (currentindex >=minindex and currentindex <= maxindex):
                 self.monsters.append(monster)
 
     def type_filter(self,typefilter,globaldata):

@@ -7,6 +7,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk,Gdk
 import os
 import csv
+import xml.etree.ElementTree as ET
 
 from globals import Monster
 import rows
@@ -23,7 +24,7 @@ class fight:
         self.enemychooser=builder.get_object("enemychooser")
         self.partyrowbox=builder.get_object("partyrowbox")
         self.enemyrowbox=builder.get_object("enemyrowbox")
-
+        self.infobox=builder.get_object("infobox")
         #connect signals
         reloadbutton.connect("clicked",self.on_reloadbutton_clicked)
         self.fightbutton.connect("clicked",self.on_fightbutton_clicked)
@@ -35,7 +36,6 @@ class fight:
         self.partychooser_fill(self.partychooser)
         self.partychooser.set_active(0)
         #initial set up of rows
-        self.baddies=globaldata.selected
         self.globaldata=globaldata
 
         self.goodies=[]
@@ -44,6 +44,7 @@ class fight:
         self.baddies=[]
         for monst in globaldata.selected:
             baddies.append(enemyrow(fightbox,monst))
+        self.labels=[]
 
 ####################################################
 #Button fuctions                                   #
@@ -74,6 +75,8 @@ class fight:
                     self.globaldata.selected.append(monst)
 
         self.create_rows()
+        self.remove_old_info()
+        self.get_monster_info()
 
     def on_fightbutton_clicked(self,button):
         for goody in self.goodies:
@@ -85,13 +88,17 @@ class fight:
         self.initsort()
         self.currentplayer=0
         self.zippedinits[self.currentplayer][1].rowframe.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse("purple"))
+        self.zippedinits[self.currentplayer][1].rowframe.modify_fg(Gtk.StateType.NORMAL, Gdk.color_parse("white"))
 
     def on_nextbutton_clicked(self,button):
         self.zippedinits[self.currentplayer][1].rowframe.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse("grey"))
+        self.zippedinits[self.currentplayer][1].rowframe.modify_fg(Gtk.StateType.NORMAL, Gdk.color_parse("black"))
+
         self.currentplayer+=1
         if self.currentplayer==len(self.zippedinits):
             self.currentplayer=0
         self.zippedinits[self.currentplayer][1].rowframe.modify_bg(Gtk.StateType.NORMAL, Gdk.color_parse("purple"))
+        self.zippedinits[self.currentplayer][1].rowframe.modify_fg(Gtk.StateType.NORMAL, Gdk.color_parse("white"))
 
 
 
@@ -108,7 +115,7 @@ class fight:
             initiatives.append(goody.initiative)
         #zip together and sort
         self.zippedinits=zip(initiatives,self.goodies)
-        self.zippedinits.sort()
+        self.zippedinits.sort(reverse=True)
          #now reorder each  goody by it's position in sorted list
         for goody in self.goodies:
             pos=self.zippedinits.index((goody.initiative,goody))
@@ -120,14 +127,14 @@ class fight:
         for baddy in self.baddies:
             initiatives.append(baddy.initiative)
         zipinits=zip(initiatives,self.baddies)
-        zipinits.sort()
+        zipinits.sort(reverse=True)
         for baddy in self.baddies:
             pos=zipinits.index((baddy.initiative,baddy))
             print pos
             self.enemyrowbox.reorder_child(baddy.rowframe,pos)
 
         self.zippedinits+=zipinits
-        self.zippedinits.sort()
+        self.zippedinits.sort(reverse=True)
 
 
 ####################################################
@@ -152,6 +159,7 @@ class fight:
             if namecount >0:
                 enemy.name=enemy.name+" "+str(namecount+1)
             self.baddies.append(rows.enemyrow(self.enemyrowbox,enemy))
+            print enemy.name
 
     def partychooser_fill(self,box):
         files=os.listdir('./userdata')
@@ -164,3 +172,33 @@ class fight:
         for file in files:
             if file[-4:]=='.enc':
                 box.append_text(file[:-4])
+
+####################################################
+#XML crap                                          #
+####################################################
+    def remove_old_info(self):
+        for label in self.labels:
+            self.infobox.remove(label)
+
+    def get_monster_info(self):
+        self.labels=[]
+        for baddy in self.baddies:
+            file='monsters/'+baddy.enemy.name
+            print file
+            try:
+                print file
+                text=open(file,'r')
+                monsterstring="Name: "+baddy.enemy.name+"\n"
+                monsterstring+=text.read()
+                print monsterstring
+                label=Gtk.Label()
+                label.set_text(monsterstring)
+                self.labels.append(label)
+            except:
+                print "no monster"
+
+        for label in self.labels:
+            print label
+            self.infobox.pack_start(label,expand=True, fill=True,padding=0)
+            self.infobox.pack_start(Gtk.Button(),True,True,0)
+            label.show()
