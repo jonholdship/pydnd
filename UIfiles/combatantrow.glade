@@ -5,6 +5,8 @@
   <object class="GtkEventBox" id="combatantframe">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="margin_top">5</property>
+    <property name="margin_bottom">5</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
@@ -13,29 +15,15 @@
           <object class="GtkLabel" id="namelabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="wrap">True</property>
             <attributes>
               <attribute name="font-desc" value="&lt;Enter Value&gt; 11"/>
+              <attribute name="style" value="oblique"/>
             </attributes>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Name</property>
-            <property name="width_chars">15</property>
-            <property name="max_width_chars">15</property>
-            <attributes>
-              <attribute name="foreground" value="#555557575353"/>
-            </attributes>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>
@@ -214,6 +202,22 @@
           <packing>
             <property name="left_attach">7</property>
             <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Name</property>
+            <property name="width_chars">15</property>
+            <property name="max_width_chars">15</property>
+            <attributes>
+              <attribute name="foreground" value="#555557575353"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
         <child>

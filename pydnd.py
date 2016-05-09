@@ -2,15 +2,17 @@ import gi
 gi.require_version('Gtk', '3.0')
 
 from gi.repository import Gtk
-import globals
-import combatant
-import monster
-import party
+
+
+from src import globals
+from src import combatant
+from src import monster
+from src import party
 
 
 globaldata=globals.globaldat()
 builder = Gtk.Builder()
-builder.add_from_file("mainwindow.glade")
+builder.add_from_file("UIfiles/mainwindow.glade")
 
 win = builder.get_object("mainwindow")
 

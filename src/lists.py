@@ -38,7 +38,7 @@ treasure=['300',' 600',' 900',' 1200',' 1600',' 2000',' 2600',' 3400',' 4500',' 
 
 
 #This section opens the csv of xpvalues and creates a list accessed as xplists[level of char][cr of monster]
-f=open('xptable.csv','rb')
+f=open('src/xptable.csv','rb')
 reader=csv.reader(f,delimiter=',',quotechar='"')
 xplists=[]
 for row in reader:

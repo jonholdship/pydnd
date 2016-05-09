@@ -41,7 +41,7 @@ class playerrow:
         self.initbox.set_text(str(self.initiative))
 
     def on_initsetbutt_clicked(self,button):
-        self.initiative=int(initbox.get_text())
+        self.initiative=int(self.initbox.get_text())
         self.initbox.set_text(str(self.initiative))
 
     def on_hitrollbutt_clicked(self,button):
@@ -98,9 +98,13 @@ class enemyrow:
         #general set up
         self.namelabel.set_text(self.enemy.name)
         self.initiative=0
+
     def on_initrollbutt_clicked(self,button):
         self.initiative = random.randint(1,20)
         self.initbox.set_text(str(self.initiative))
+
+    def on_initsetbutt_clicked(self,button):
+        self.initiative=int(self.initbox.get_text())
 
     #Roll monster's hitdie. For some reason, monsters have hitdie lists when created
     #but when retrieved for this funciton, come as strings

@@ -1,5 +1,5 @@
 import gi
-import lists
+from src import lists
 import os
 import csv
 gi.require_version('Gtk', '3.0')
