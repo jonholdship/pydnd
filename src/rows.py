@@ -6,7 +6,7 @@ class playerrow:
 	#on intialisation, load the frame
     def __init__(self,box,player):
         self.player=player
-        gladefile="combatantrow.glade"
+        gladefile="UIfiles/combatantrow.glade"
         builder=Gtk.Builder()
         builder.add_from_file(gladefile)
 
@@ -74,7 +74,7 @@ class enemyrow:
     #on intialisation, load the frame
     def __init__(self,box,enemy):
         self.enemy=enemy
-        gladefile="combatantrow.glade"
+        gladefile="UIfiles/combatantrow.glade"
         builder=Gtk.Builder()
         builder.add_from_file(gladefile)
 

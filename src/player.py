@@ -4,7 +4,7 @@ from gi.repository import Gtk
 class player:
     def __init__(self,stats):
         builder=Gtk.Builder()
-        builder.add_from_file("playerrow.glade")
+        builder.add_from_file("UIfiles/playerrow.glade")
         self.playerrow=builder.get_object("playerrow")
         self.hpbox=builder.get_object("hpbox")
         self.namebox=builder.get_object("namebox")
