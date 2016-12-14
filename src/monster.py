@@ -69,7 +69,7 @@ class encounter:
         #set up scroll windows of monsters lists
         self.filterlist=monstlist(filterwindow)
         self.selectlist=monstlist(selectwindow)
-        self.filterlist.fill(globaldata)
+        #self.filterlist.fill(globaldata)
 
         self.encounterbox_fill(self.encounterbox)
 
@@ -82,12 +82,14 @@ class encounter:
         chosencr=self.mincrbox.get_active_text()
         mincrindex=lists.crs.index(chosencr)
 
-        self.filterlist.cr_filter(mincrindex,maxcrindex,lists.crs,self.globaldata)
 
+        self.filterlist.cr_filter(mincrindex,maxcrindex,lists.crs,self.globaldata)
+        print "cr"
         #filter by type
         chosentype=self.typebox.get_active_text()
         self.filterlist.type_filter(chosentype,self.globaldata)
         
+        print "type"
         #filter by environment
         chosenenvir=self.environbox.get_active_text()
         self.filterlist.envir_filter(chosenenvir,self.globaldata)
@@ -96,13 +98,15 @@ class encounter:
         chosensize=self.sizebox.get_active_text()
         self.filterlist.size_filter(chosensize,self.globaldata)
 
+        print "size"
         #filter by text
         searchtext=self.searchbar.get_text()
         self.filterlist.text_filter(searchtext)
-
+        print "search"
 
         #redraw list
         self.filterlist.redraw_list();
+        print "draw"
 
     def monstdel_pressed(self,button):
         self.selectlist.remove_monster()
@@ -281,12 +285,16 @@ class monstlist:
                 return monster
 
     def redraw_list(self):
-        # remove all the entries in the model
+        print "redraw start"
+        #remove all the entries in the model
+
         if len(self.listmodel) != 0:
             for i in range(len(self.listmodel)):
                 iter = self.listmodel.get_iter(0)
                 self.listmodel.remove(iter)
 
+        #self.listmodel.clear()
+        print "clear"
         #add  monsters list to model again
         for i in range(len(self.monsters)):
             self.listmodel.append([self.monsters[i].challenge_rating,self.monsters[i].name])
